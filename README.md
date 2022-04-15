@@ -17,12 +17,3 @@ Taches :
 2. Interface pour ins ́erer un client dans la base.
 3. Interface pour ajouter une r ́eservation.
 4. Interface pour  ́editer une facture avec possibilit ́e de la payer.
-
-IMPORTANT :
-To connect to your database use these details
-
-Server: sql4.freemysqlhosting.net
-Name: sql4485888
-Username: sql4485888
-Password: uKFeupzmWW
-Port number: 3306
