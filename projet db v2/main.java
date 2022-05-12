@@ -127,8 +127,56 @@
 	}
 
 
-	public static void facture(){
-		 //
+	import java.util.Scanner;
+
+	public static void facture(int idClient, int idHotel, int numChambre, Date d){
+		int connexion = BD.ouvrirConnexion(adresse, bd, login.password)
+
+	    String sql = 
+	       "SELECT NomClient, PrenomClient, NomHotel, Prix, Paye
+
+		FROM RESERVATION, CLIENT, HOTEL, CHAMBRE
+
+		WHERE RESERVATION.IDClient = CLIENT.IDClient
+		AND RESERVATION.IDHotel = HOTEL.IDHotel
+		AND HOTEL.IDHotel = CHAMBRE.IDHotel
+		AND RESERVATION.NumeroChambre = CHAMBRE.NumeroChambre
+
+		AND idClient ="+idClient+" 
+		AND idHotel ="+idHotel+"
+		AND NumeroChambre ="+numChambre+"
+		AND Date ="+d+"
+		;";
+
+	    int res = BD.executerSelect(connexion);
+
+	    while (BD.suivant(res)) {
+		String nomClient = BD.attributString(res, "NomClient");
+		String prenomClient = BD.attributString(res, "PrenomClient");
+		String nomHotel = BD.attributString(res, "NomHotel");
+		int prix = BD.attributInt(res, "Prix");
+		boolean paye = BD.attributBoolean(res, "Paye")
+	    }
+
+	    System.out.println(
+		"Facture du "+d.toString()+"\nFait a l'hotel :"+nomHotel+". 
+		\n\nLe client "+prenomClient+" "+nomClient+" a reserve 
+		la chambre numero "+numChambre+" a ce jour.");
+
+	    if (paye) System.out.println("\nPrix payé :"+prix);
+	    else System.out.println("\nPrix restant a payer :"+prix+
+	    "Voulez vous regler maintenant ?(o/n)");
+
+	    Scanner reader = new Scanner(System.in);
+	    char input = reader.nextChar();
+	    reader.close();
+
+	    if (input == 'y') {
+		paye = true;
+		System.out.println("Payement accepte !");
+	    }
+	    else System.out.println("Erreur payement refuse");
+
 	}
 	 
 	
