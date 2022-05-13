@@ -1,8 +1,8 @@
 public class Hotel{
-	public static String adresse = "free-tier13.aws-eu-central-1.cockroachlabs.cloud";
-	public static String bd ="defaultdb";
-	public static String login = "tristan";
-	public static String password = "ifT25w2fdd6gYgUI7h7xjQ";
+	public static String adresse = "sql11.freemysqlhosting.net";
+	public static String bd ="sql11491980";
+	public static String login = "sql11491980";
+	public static String password = "akNmglgrFq";
 	
 	public static void main(String[] args) {
 		
