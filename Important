@@ -1,9 +1,6 @@
 To connect to your database use these details
-
-Server: free-tier13.aws-eu-central-1.cockroachlabs.cloud
-// Name: defaultdb
-Username: tristan
-Password: ifT25w2fdd6gYgUI7h7xjQ
-Port number: 26257
-
-oZEg*G5pE!a2p&QA
+Server: sql11.freemysqlhosting.net
+Name: sql11491980
+Username: sql11491980
+Password: akNmglgrFq
+Port number: 3306
