@@ -1,7 +1,7 @@
 To connect to your database use these details
 
 Server: free-tier13.aws-eu-central-1.cockroachlabs.cloud
-// Name: sql4485888
+// Name: defaultdb
 Username: tristan
 Password: ifT25w2fdd6gYgUI7h7xjQ
 Port number: 26257
