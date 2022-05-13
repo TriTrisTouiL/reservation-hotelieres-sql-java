@@ -1,5 +1,4 @@
- import java.util.Scanner;
- class main {
+class main {
 		 
 	public static String adresse = "sql11.freemysqlhosting.net";
 	public static String bd ="sql11491980";
@@ -8,7 +7,7 @@
 	
 	
 	//requete de selection
-	//entrée : requete -> une requete sql de type select
+	//entrï¿½e : requete -> une requete sql de type select
 	//sortie : 0 si rien existe 1 sinon
 	public static int requeteSelect(String requete) {
 		int connexion = BD.ouvrirConnexion("sql11.freemysqlhosting.net", "sql11491980", "sql11491980","akNmglgrFq");
@@ -20,7 +19,7 @@
 	}
 
 	//requete d'insertion
-	//entrée : requete -> une requete sql de type insert
+	//entrï¿½e : requete -> une requete sql de type insert
 	public static int requeteInsert(String requete) {
 		int connexion = BD.ouvrirConnexion("sql11.freemysqlhosting.net", "sql11491980", "sql11491980","akNmglgrFq");
 		int res = BD.executerUpdate(connexion, requete);
@@ -35,7 +34,7 @@
 	public static Dates saisirDate(){
 		Dates date=new Dates();
 		
-		Ecran.afficher("veuillez saisir l'année : ");
+		Ecran.afficher("veuillez saisir l'annï¿½e : ");
 		date.year=Clavier.saisirInt(); 
 				
 		Ecran.afficher("veuillez saisir le mois : ");
@@ -107,9 +106,9 @@
 		Ecran.afficher("Veuillez saisir le nom de la rue :");
 		String nomRue=Clavier.saisirString();
 
-		String req = "INSERT INTO CLIENT (NomClient, PrenomClient, VilleCl, CPCl, NumCl, RueCl) VALUES ("+nom+","+prenom+","+ville+","+cp+","+numRue+","+nomRue+");" ;
+		String req = "INSERT INTO CLIENT (NomClient, PrenomClient, VilleCl, CPCl, NumCl, RueCl) VALUES ('"+nom+"','"+prenom+"','"+ville+"',"+cp+","+numRue+",'"+nomRue+"');" ;
 		if(requeteInsert(req)!=-1){
-			Ecran.afficher("Le client à bien été inseré\n\n");
+			Ecran.afficher("Le client ï¿½ bien ï¿½tï¿½ inserï¿½\n\n");
 		}else{
 			Ecran.afficher("Il y a eu une erreure");
 		}
@@ -132,7 +131,7 @@
 		Dates date=new Dates();
 		date=saisirDate();
 		
-		Ecran.afficher("Veuillez saisir si il a payé ou non (oui ou non) :");
+		Ecran.afficher("Veuillez saisir si il a payï¿½ ou non (oui ou non) :");
 		String test = Clavier.saisirString();
 		boolean paye;
 		while (test!="oui" && test!="non"){
@@ -152,7 +151,7 @@
 			String req = "INSERT INTO RESERVATION (IDClient, IDHotel, NumeroChambre, Date, Paye) VALUES ("+idClient+","+idHotel+","+numChambre+","+date+","+paye+");" ;
 			requeteInsert(req);
 		if(requeteInsert(req)!=-1){
-			Ecran.afficher("La reservation à bien été inseré\n\n");
+			Ecran.afficher("La reservation ï¿½ bien ï¿½tï¿½ inserï¿½\n\n");
 		}else{
 			Ecran.afficher("Il y a eu une erreure");
 		}
@@ -182,7 +181,7 @@
 		String prenomClient;
 		String nomHotel;
 		int prix;
-		boolean paye;
+		int paye;
 		
 		String sql = "SELECT NomClient, PrenomClient, NomHotel, Prix, Paye FROM RESERVATION, CLIENT, HOTEL, CHAMBRE WHERE RESERVATION.IDClient = CLIENT.IDClient AND RESERVATION.IDHotel = HOTEL.IDHotel AND HOTEL.IDHotel = CHAMBRE.IDHotel AND RESERVATION.NumeroChambre = CHAMBRE.NumeroChambre AND idClient ="+idClient+" AND idHotel ="+idHotel+" AND NumeroChambre ="+numChambre+" AND Date ="+d+" ;";
 
@@ -193,12 +192,12 @@
 			prenomClient = BD.attributString(res, "PrenomClient");
 			nomHotel = BD.attributString(res, "NomHotel");
 			prix = BD.attributInt(res, "Prix");
-			paye = BD.attributBoolean(res, "Paye");
+			paye = BD.attributInt(res, "Paye");
 		}
 
 		System.out.println("Facture du "+d.toString()+"\nFait a l'hotel :"+nomHotel+". \n\nLe client "+prenomClient+" "+nomClient+" a reserve la chambre numero "+numChambre+" a ce jour.");
 
-		if(paye) System.out.println("\nPrix payé : "+prix);
+		if(paye == 1) System.out.println("\nPrix payï¿½ : "+prix);
 		else System.out.println("\nPrix restant a payer : "+prix+". Voulez vous regler maintenant ?(o/n)");
 
 		char input = Clavier.saisirChar();
@@ -207,7 +206,8 @@
 			paye = true;
 			requeteInsert("UPDATE RESERVATION SET Paye = true WHERE idClient ="+idClient+" AND idHotel ="+idHotel+" AND NumeroChambre ="+numChambre+" AND Date ="+d+" ;");
 			System.out.println("Payement accepte\n");
-		}else System.out.println("Erreur payement refuse\n");
+		}
+		else System.out.println("Erreur payement refuse\n");
 		menu();
 		}
 
