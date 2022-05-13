@@ -1,40 +1,41 @@
-import java.util.Scanner;
+ import java.util.Scanner;
  class main {
-
-	public static String adresse = "";
-	public static String bd = "";
-	public static String login = "";
-	public static String password = "";
+		 
+	public static String adresse = "sql11.freemysqlhosting.net";
+	public static String bd ="sql11491980";
+	public static String login = "sql11491980";
+	public static String password = "akNmglgrFq";
 	
 	
 	//requete de selection
-	//entrÃ©e : requete -> une requete sql de type select
+	//entrée : requete -> une requete sql de type select
 	//sortie : 0 si rien existe 1 sinon
 	public static int requeteSelect(String requete) {
-		int connexion = BD.ouvrirConnexion(adresse, bd, login,password);
+		int connexion = BD.ouvrirConnexion("sql11.freemysqlhosting.net", "sql11491980", "sql11491980","akNmglgrFq");
 		int res = BD.executerSelect(connexion, requete);
 		
-		BD.fermerResultat(res);
+		//BD.fermerResultat(res);
 		BD.fermerConnexion(connexion);
 		return res;
 	}
 
 	//requete d'insertion
-	//entrÃ©e : requete -> une requete sql de type insert
-	public static void requeteInsert(String requete) {
-		int connexion = BD.ouvrirConnexion(adresse, bd, login,password);
+	//entrée : requete -> une requete sql de type insert
+	public static int requeteInsert(String requete) {
+		int connexion = BD.ouvrirConnexion("sql11.freemysqlhosting.net", "sql11491980", "sql11491980","akNmglgrFq");
 		int res = BD.executerUpdate(connexion, requete);
 		
-		BD.fermerResultat(res);
+		//BD.fermerResultat(res);
 		BD.fermerConnexion(connexion);
-	}
+		return res;
+		}
 	 
 	//permet de saisir une date
 	//sortie la date saisie
 	public static Dates saisirDate(){
 		Dates date=new Dates();
 		
-		Ecran.afficher("veuillez saisir l'annÃ©e : ");
+		Ecran.afficher("veuillez saisir l'année : ");
 		date.year=Clavier.saisirInt(); 
 				
 		Ecran.afficher("veuillez saisir le mois : ");
@@ -107,9 +108,12 @@ import java.util.Scanner;
 		String nomRue=Clavier.saisirString();
 
 		String req = "INSERT INTO CLIENT (NomClient, PrenomClient, VilleCl, CPCl, NumCl, RueCl) VALUES ("+nom+","+prenom+","+ville+","+cp+","+numRue+","+nomRue+");" ;
-		requeteInsert(req);
+		if(requeteInsert(req)!=-1){
+			Ecran.afficher("Le client à bien été inseré\n\n");
+		}else{
+			Ecran.afficher("Il y a eu une erreure");
+		}
 
-		Ecran.afficher("Le client Ã  bien Ã©tÃ© inserÃ©\n\n");
 		menu();
 	}
 	 
@@ -128,9 +132,17 @@ import java.util.Scanner;
 		Dates date=new Dates();
 		date=saisirDate();
 		
-		Ecran.afficher("Veuillez saisir si il a payÃ© ou non (oui ou non) :");
-		String paye=Clavier.saisirString();
-
+		Ecran.afficher("Veuillez saisir si il a payé ou non (oui ou non) :");
+		String test = Clavier.saisirString();
+		boolean paye;
+		while (test!="oui" && test!="non"){
+			if (test=="oui"){
+				paye=true;
+			}else{
+				paye=false;
+			}
+		}
+		
 		String preReq = "SELECT * FROM RESERVATION WHERE IDClient="+idClient+" AND IDHotel="+idHotel+" AND NumeroChambre="+numChambre+"AND Date="+date+"AND Paye="+paye+");";
 		
 		if(requeteSelect(preReq)==0){
@@ -139,47 +151,65 @@ import java.util.Scanner;
 		}else{
 			String req = "INSERT INTO RESERVATION (IDClient, IDHotel, NumeroChambre, Date, Paye) VALUES ("+idClient+","+idHotel+","+numChambre+","+date+","+paye+");" ;
 			requeteInsert(req);
-			Ecran.afficher("La reservation Ã  bien Ã©tÃ© inserÃ©\n\n");
+		if(requeteInsert(req)!=-1){
+			Ecran.afficher("La reservation à bien été inseré\n\n");
+		}else{
+			Ecran.afficher("Il y a eu une erreure");
+		}
 			menu();
 		}
 	}
 
 
 
-	 
-	
-
-	public static void facture(int idClient, int idHotel, int numChambre, Dates d){
+	public static void facture(){
+		
+		Ecran.afficher("Veuillez saisir l'id du client :");
+		int idClient=Clavier.saisirInt();
+		
+		Ecran.afficher("Veuillez saisir l'id de l'hotel:");
+		int idHotel=Clavier.saisirInt();
+						
+		Ecran.afficher("Veuillez saisir le numero de la chambre :");
+		int numChambre=Clavier.saisirInt();
+		
+		Dates d=new Dates();
+		d=saisirDate();
+				
 		int connexion = BD.ouvrirConnexion(adresse, bd, login, password);
 
-	    String sql = "SELECT NomClient, PrenomClient, NomHotel, Prix, Paye FROM RESERVATION, CLIENT, HOTEL, CHAMBRE WHERE RESERVATION.IDClient = CLIENT.IDClient AND RESERVATION.IDHotel = HOTEL.IDHotel AND HOTEL.IDHotel = CHAMBRE.IDHotel AND RESERVATION.NumeroChambre = CHAMBRE.NumeroChambre AND idClient ="+idClient+" AND idHotel ="+idHotel+" AND NumeroChambre ="+numChambre+" AND Date ="+d+" ;";
+		String nomClient;
+		String prenomClient;
+		String nomHotel;
+		int prix;
+		boolean paye;
+		
+		String sql = "SELECT NomClient, PrenomClient, NomHotel, Prix, Paye FROM RESERVATION, CLIENT, HOTEL, CHAMBRE WHERE RESERVATION.IDClient = CLIENT.IDClient AND RESERVATION.IDHotel = HOTEL.IDHotel AND HOTEL.IDHotel = CHAMBRE.IDHotel AND RESERVATION.NumeroChambre = CHAMBRE.NumeroChambre AND idClient ="+idClient+" AND idHotel ="+idHotel+" AND NumeroChambre ="+numChambre+" AND Date ="+d+" ;";
 
-	    int res = BD.executerSelect(connexion,sql);
+		int res = BD.executerSelect(connexion,sql);
 
-	    while (BD.suivant(res)) {
-			String nomClient = BD.attributString(res, "NomClient");
-			String prenomClient = BD.attributString(res, "PrenomClient");
-			String nomHotel = BD.attributString(res, "NomHotel");
-			int prix = BD.attributInt(res, "Prix");
-			String paye = BD.attributString(res, "Paye");
-	    }
+		while (BD.suivant(res)) {
+			nomClient = BD.attributString(res, "NomClient");
+			prenomClient = BD.attributString(res, "PrenomClient");
+			nomHotel = BD.attributString(res, "NomHotel");
+			prix = BD.attributInt(res, "Prix");
+			paye = BD.attributBoolean(res, "Paye");
+		}
 
-	    System.out.println("Facture du "+d.toString()+"\nFait a l'hotel :"+nomHotel+". \n\nLe client "+prenomClient+" "+nomClient+" a reserve la chambre numero "+numChambre+" a ce jour.");
+		System.out.println("Facture du "+d.toString()+"\nFait a l'hotel :"+nomHotel+". \n\nLe client "+prenomClient+" "+nomClient+" a reserve la chambre numero "+numChambre+" a ce jour.");
 
-	    if(paye=="oui") System.out.println("\nPrix payÃ© :"+prix);
-	    else System.out.println("\nPrix restant a payer :"+prix+"Voulez vous regler maintenant ?(o/n)");
+		if(paye) System.out.println("\nPrix payé : "+prix);
+		else System.out.println("\nPrix restant a payer : "+prix+". Voulez vous regler maintenant ?(o/n)");
 
-	    Scanner reader = new Scanner(System.in);
-	    char input = reader.nextChar();
-	    reader.close();
+		char input = Clavier.saisirChar();
 
-	    if (input == 'o') {
-		paye = "oui";
-		System.out.println("Payement accepte !");
-	    }
-	    else System.out.println("Erreur payement refuse");
-
-	}
+		if (input == 'o') {
+			paye = true;
+			requeteInsert("UPDATE RESERVATION SET Paye = true WHERE idClient ="+idClient+" AND idHotel ="+idHotel+" AND NumeroChambre ="+numChambre+" AND Date ="+d+" ;");
+			System.out.println("Payement accepte\n");
+		}else System.out.println("Erreur payement refuse\n");
+		menu();
+		}
 
 
 	
